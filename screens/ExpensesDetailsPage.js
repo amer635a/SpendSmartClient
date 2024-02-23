@@ -9,6 +9,7 @@ import { HOST } from '../network';
 import { Ionicons, Feather } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
+import Items_table  from '../components/Items_table';
 
 const ExpensesDetails = ({ route, navigation }) => {
     const [yearNumber, setYearNumber] = useState("");
@@ -40,6 +41,7 @@ const ExpensesDetails = ({ route, navigation }) => {
         
         return (
             <View style={styles.comboBox}>
+                
                 <TouchableOpacity onPress={toggleDropdown} style={styles.comboBoxTouchable}>
                     <Text style={styles.selectedOption}>{selectedOption }</Text>
                     <FontAwesome5 name={showDropdown ? "caret-up" : "caret-down"} size={16} color="black" style={styles.dropdownIcon} />
@@ -273,40 +275,21 @@ const ExpensesDetails = ({ route, navigation }) => {
                 start={[0, 0]}
                 end={[1, 1]}
             />
-
+            <Text>aaaaaaaa</Text>
+            
             <View style={styles.container}>
                 <Text style={styles.header}>Expenses Details</Text>
                 <View style={styles.row}>
                     <Text style={styles.cell}>Select Date:</Text>
                     <ComboBox options={availableDates} onSelect={handleDateSelect} />
                 </View>
-                <View style={[styles.row, styles.headerRow]}>
-                    <Text style={styles.headerCell}>Budget</Text>
-                    <Text style={styles.headerCell}>Tracked</Text>
-                    <Text style={styles.headerCell}>Expenses</Text>
-                </View>
-                <View>
-                    <FlatList
-                        style={{ height: 300 }}
-                        data={expensesData}
-                        keyExtractor={(item) => item._id}
-                        renderItem={renderItem}
+                
+                    <Items_table 
+                    data={expensesData}
+                    yearNumber={yearNumber}
+                    monthNumber={monthNumber}
                     />
-                </View>
-                <View>
-                    <>
-                        <View style={styles.line} />
-                        <View style={styles.totalRow}>
-                            <Text style={[styles.cell, styles.totalCell]}>
-                                {totalBudget.toFixed(2)}
-                            </Text>
-                            <Text style={[styles.cell, styles.totalCell]}>
-                                {totalTracked.toFixed(2)}
-                            </Text>
-                            <Text style={[styles.cell, styles.totalCell]}>Total</Text>
-                        </View>
-                    </>
-                </View>
+              
                 <View style={{ marginBottom: 20 }}></View>
                 <TouchableOpacity
                     onPress={handleViewExpensesReport}

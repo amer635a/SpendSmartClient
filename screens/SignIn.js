@@ -7,6 +7,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from '../context/auth';
 import { LinearGradient } from 'expo-linear-gradient';
 
+
+
 const SignIn = ({ navigation }) => {
   const [EmailName, setEmailName] = useState('');
   const [email, setEmail] = useState("");
@@ -40,10 +42,29 @@ const SignIn = ({ navigation }) => {
     }
 
   };
+
+  // Get current date
+let currentDate = new Date();
+
+// Extracting day, month, and year
+let day = currentDate.getDate();
+let month = currentDate.getMonth() + 1; // Month is zero-indexed, so we add 1
+let year = currentDate.getFullYear();
+
+// Formatting the date
+let formattedDate = `${day}/${month}/${year}`;
+
+// Display the date
+console.log("Current date is:", formattedDate);
+
+
+
+
   return (
     
     <KeyboardAwareScrollView contentContainerStyle={styles.container}>
     <View>  
+       
        <LinearGradient
     colors={['#A0E6C3','#FFFFFF']}
     style={styles.background}
