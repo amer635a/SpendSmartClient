@@ -160,6 +160,7 @@ const ExpensesDetails = ({ route, navigation }) => {
                 const updatedExpensesData = [...expensesData];
                 updatedExpensesData[index].budget = parseFloat(updatedBudget);
                 setExpensesData(updatedExpensesData);
+                setEditingIndex(null);
             } else {
                 Alert.alert("Error", "Failed to update budget. Please try again.");
             }
