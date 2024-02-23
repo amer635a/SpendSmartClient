@@ -15,14 +15,9 @@ const ExpensesDetails = ({ route, navigation }) => {
     const [yearNumber, setYearNumber] = useState("");
     const [monthNumber, setMonthNumber] = useState("");
     const [expensesData, setExpensesData] = useState(route.params.expensesData || []);
-    const [editingIndex, setEditingIndex] = useState(null);
-    const [updatedBudget, setUpdatedBudget] = useState("");
-    const totalTracked = expensesData.reduce((acc, item) => acc + parseFloat(item.tracked), 0);
-    const totalBudget = expensesData.reduce((acc, item) => acc + parseFloat(item.budget), 0);
+
     const [availableDates, setAvailableDates] = useState([]);
     const [selectedDate, setSelectedDate] = useState(new Date());
-
-    let show_seleceted_date=0
     const [selectedOption, setSelectedOption] = useState(0);
 
     const ComboBox = ({ options, onSelect }) => {
@@ -65,20 +60,7 @@ const ExpensesDetails = ({ route, navigation }) => {
         );
     };
 
-    const showDatePicker = () => {
-        Alert.alert(
-            "Select Date",
-            "Choose a date to view expenses",
-            availableDates.map(date => ({
-                text: date,
-                onPress: () => handleDateSelect(date)
-            })),
-            {
-                cancelable: true,
-                onDismiss: () => console.log('Dismissed')
-            }
-        );
-    };
+   
 
     const handleDateSelect = async (selectedDate) => {
         const [year, month] = selectedDate.split("-");
@@ -99,113 +81,6 @@ const ExpensesDetails = ({ route, navigation }) => {
             Alert.alert("Error", "An error occurred while fetching expenses data. Please try again.");
         }
     };
-
-
-    const handleEditBudget = (index) => {
-        setEditingIndex(index);
-        setUpdatedBudget(expensesData[index].budget.toString());
-    };
-
-    const handleContainerPress = () => {
-        if (editingIndex !== null) {
-            setEditingIndex(null);
-        }
-    };
-
-    const handleDeleteExpense = async (expenseId) => {
-        Alert.alert(
-            "Confirm Deletion",
-            "Are you sure you want to delete this expense?",
-            [
-                {
-                    text: "Cancel",
-                    style: "cancel",
-                },
-                {
-                    text: "Delete",
-                    onPress: async () => {
-                        try {
-                            const response = await axios.delete(`${HOST}/api/deleteExpense/${expenseId}`);
-                            if (response.data.message === "Expense deleted successfully") {
-                                Alert.alert("Success", "Expense deleted successfully!");
-                                const updatedExpensesData = expensesData.filter((expense) => expense._id !== expenseId);
-                                setExpensesData(updatedExpensesData);
-                            } else {
-                                Alert.alert("Error", "Failed to delete expense. Please try again.");
-                            }
-                        } catch (error) {
-                            console.error("Error deleting expense:", error);
-                            Alert.alert("Error", "An error occurred. Please try again.");
-                        }
-                    },
-                },
-            ]
-        );
-    };
-
-    const handleSaveBudget = async (index, item) => {
-        console.log("itemId=", item._id);
-        try {
-            const response = await axios.put(
-                `${HOST}/api/updateBudget/${item._id}`,
-                {
-                    newBudget: updatedBudget,
-                    yearNumber: yearNumber,
-                    monthNumber: monthNumber,
-                }
-            );
-
-            console.log("Update response:", response.data);
-
-            if (response.data.success) {
-                Alert.alert("Success", "Budget updated successfully!");
-                const updatedExpensesData = [...expensesData];
-                updatedExpensesData[index].budget = parseFloat(updatedBudget);
-                setExpensesData(updatedExpensesData);
-                setEditingIndex(null);
-            } else {
-                Alert.alert("Error", "Failed to update budget. Please try again.");
-            }
-
-        } catch (error) {
-            console.error("Error updating budget:", error);
-            Alert.alert("Error", "An error occurred. Please try again.");
-        }
-    };
-
-    const renderItem = ({ item, index }) => (
-        <TouchableWithoutFeedback onPress={handleContainerPress}>
-            <View style={styles.row}>
-                {editingIndex === index ? (
-                    <>
-                        <TextInput
-                            style={[styles.cell, styles.editInput]}
-                            value={updatedBudget}
-                            onChangeText={(text) => setUpdatedBudget(text)}
-                            keyboardType="numeric"
-                        />
-                        <TouchableOpacity onPress={() => handleSaveBudget(index, item)}>
-                            <Ionicons name="checkmark" size={24} color="green" />
-                        </TouchableOpacity>
-                    </>
-                ) : (
-                    <>
-                        <TouchableOpacity onPress={() => handleEditBudget(index)}>
-                            <Ionicons name="pencil" size={24} color="blue" />
-                        </TouchableOpacity>
-                        <Text style={styles.cell}>
-                            {item.budget}
-                        </Text>
-                    </>
-                )}
-                <Text style={styles.cell}>{item.tracked}</Text>
-                <Text style={styles.cell}>{item.name}</Text>
-                <TouchableOpacity onPress={() => handleDeleteExpense(item._id)}>
-                    <Feather name="trash-2" size={20} color="blue" />
-                </TouchableOpacity>
-            </View>
-        </TouchableWithoutFeedback>
-    );
 
     useEffect(() => {
         const currentDate = new Date();
@@ -275,8 +150,7 @@ const ExpensesDetails = ({ route, navigation }) => {
                 start={[0, 0]}
                 end={[1, 1]}
             />
-            <Text>aaaaaaaa</Text>
-            
+      
             <View style={styles.container}>
                 <Text style={styles.header}>Expenses Details</Text>
                 <View style={styles.row}>
@@ -374,20 +248,8 @@ const styles = StyleSheet.create({
         color: '#333333',
         textAlign: 'center',
     },
-    headerRow: {
-        backgroundColor: 'pink',
-        borderBottomWidth: 2,
-        borderBottomColor: '#CCCCCC',
-        paddingVertical: 8,
-    },
-    headerCell: {
-        flex: 1,
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#333333',
-        alignSelf: 'center',
-        textAlign: 'center',
-    },
+     
+    
     row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -414,18 +276,7 @@ const styles = StyleSheet.create({
         paddingVertical: 12,
         paddingHorizontal: 20,
     },
-    totalCell: {
-        fontWeight: 'bold',
-    },
-    datePicker: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        borderWidth: 1,
-        borderColor: '#333333',
-        borderRadius: 5,
-        paddingHorizontal: 10,
-        paddingVertical: 5,
-    },
+    
     dropdownIcon: {
         marginLeft: 'auto', // Align icon to the right
     },
@@ -459,12 +310,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         elevation: 5,
     },
-    editInput: {
-        borderWidth: 1,
-        borderColor: 'black',
-        borderRadius: 5,
-        padding: 5,
-    },
+   
 
 });
 
