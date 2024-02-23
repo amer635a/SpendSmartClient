@@ -5,20 +5,27 @@ import { LinearGradient } from 'expo-linear-gradient';
 import axios from 'axios';
 import { HOST } from '../network';
 
+import Modal_Last_month_process  from '../components/Modal_Last_month_process';
 
 const OptionPage = ({ navigation }) => {
   const user_id = '64d373c5bf764a582023e5f7';
-  const MinuteProcess=5;
-  const HourProcess=18;
-  const DayProcess=10
+
+  const is_client_update_Last_Month_Process=false
+ 
+
+  const DayProcess=23
+  const HourProcess=23;
+  const MinuteProcess=10;
 
   //Previuos Month
-  const [yearNumber, setPrevYear] = useState("");
-  const [monthNumber, setPrevMonth] = useState("");
+  const [yearNumber, setPrevYear] = useState(0);
+  const [monthNumber, setPrevMonth] = useState(0);
 
-  const [dayCurrent, setDayCurrent] = useState("");
-  const [hourCurrent, setHourCurrent] = useState("");
-  const [minuteCurrent, setMinuteCurrent] = useState("");
+  const [dayCurrent, setDayCurrent] = useState(0);
+  const [hourCurrent, setHourCurrent] = useState(0);
+  const [minuteCurrent, setMinuteCurrent] = useState(0);
+
+  const [is_last_month_process_active, set_is_last_month_process_active] = useState(false);
 
   const handleGoals = async () => {
     navigation.navigate("GoalManagement");
@@ -33,15 +40,24 @@ const OptionPage = ({ navigation }) => {
     textInputs: [],
   };
 
+   
+  const fetch_value_of_last_Month_process=()=>{
+    return is_client_update_Last_Month_Process
+  }
   const LastMonthProcess =async () => {
-    if (dayCurrent == 6 && minuteCurrent == 22 && hourCurrent==18) {
+    resp=fetch_value_of_last_Month_process()
+    if (true==resp)
+        return 
+
+    console.log("Current "+dayCurrent+" "+hourCurrent+"   "+ minuteCurrent)
+    console.log("Process "+DayProcess+" "+HourProcess+"   "+ MinuteProcess)
+
+    if (dayCurrent >= DayProcess  && hourCurrent>=HourProcess && minuteCurrent >= MinuteProcess) {
       try {
+        console.log("active Last Month Process ")
         const resp = await axios.post(`${HOST}/api/getExpenses`, { user_id, yearNumber, monthNumber });
-        
-        // Instead of navigating with parameters, set the expenses data in the state
-        navigation.navigate("ExpensesDetailsPage",{
-          expensesData: resp.data.expenses,
-        });
+        set_is_last_month_process_active(true)
+         
     } catch (error) {
         console.error("Error fetching expenses data:", error);
     }
@@ -58,17 +74,20 @@ const OptionPage = ({ navigation }) => {
     setPrevYear(pastMonthDate.getFullYear().toString());
     setPrevMonth((pastMonthDate.getMonth()).toString()); 
 
-    setDayCurrent((currentDate.getDay()))
+    setDayCurrent((currentDate.getDate()))
     setHourCurrent((currentDate.getHours()))
     setMinuteCurrent((currentDate.getMinutes()))
+    
     LastMonthProcess();
-    console.log("hi     "+pastMonthDate.getFullYear()+"     "+yearNumber+"   "+ monthNumber)
+    
+     
+
   }, []); 
 
   return (
 
     <SafeAreaView style={styles.container}>
-
+     
       <View style={styles.containerr}>
         <LinearGradient
           colors={['#C9F0DB', '#A0E6C3']}
@@ -85,13 +104,26 @@ const OptionPage = ({ navigation }) => {
             <Text style={styles.subtitle}>Smart</Text>
 
           </View>
+          
+              {true===is_last_month_process_active?
+                (
+                    <Modal_Last_month_process
+                    Visible={is_last_month_process_active}
+                    />
+                ):
+                (
+                    <Modal_Last_month_process
+                    Visible={is_last_month_process_active}
+                    />
+                )
+              }
           <View style={styles.buttonContainerStyle}>
             <Text style={styles.selectOptionText}>Select An Option</Text>
-
+            
             <TouchableOpacity onPress={handelSavings} style={styles.buttonStyle}>
               <Text style={styles.buttonText}>View Saving's</Text>
             </TouchableOpacity>
-
+            
             <TouchableOpacity onPress={handleGoals} style={styles.buttonStyle}>
               <Text style={styles.buttonText}>Manage Goals</Text>
             </TouchableOpacity>
@@ -106,6 +138,7 @@ const OptionPage = ({ navigation }) => {
       </View>
 
       <FooterList />
+      
     </SafeAreaView>
   );
 };

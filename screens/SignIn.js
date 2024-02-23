@@ -57,12 +57,11 @@ let formattedDate = `${day}/${month}/${year}`;
 // Display the date
 console.log("Current date is:", formattedDate);
 
-
-
+ 
 
   return (
     
-    <KeyboardAwareScrollView contentContainerStyle={styles.container}>
+    <KeyboardAwareScrollView contentContainerStyle={styles.container} >
     <View>  
        
        <LinearGradient
