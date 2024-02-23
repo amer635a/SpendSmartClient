@@ -19,7 +19,6 @@ const ExpensesDetails = ({ route, navigation }) => {
     const [availableDates, setAvailableDates] = useState([]);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [selectedOption, setSelectedOption] = useState(0);
-
     const ComboBox = ({ options, onSelect }) => {
         const [showDropdown, setShowDropdown] = useState(false);
         show_seleceted_date=options[0]
@@ -31,7 +30,6 @@ const ExpensesDetails = ({ route, navigation }) => {
             setSelectedOption(item);
             onSelect(item);
             toggleDropdown();
-  
         };
         
         return (

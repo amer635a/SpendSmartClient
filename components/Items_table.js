@@ -17,8 +17,8 @@ const Items_table=Props=>{
     const [expensesData, setExpensesData] = useState(Props.data|| []);
     const [editingIndex, setEditingIndex] = useState(null);
     const [updatedBudget, setUpdatedBudget] = useState("");
-    const totalTracked = expensesData.reduce((acc, item) => acc + parseFloat(item.tracked), 0);
-    const totalBudget = expensesData.reduce((acc, item) => acc + parseFloat(item.budget), 0);
+    const totalTracked = Props.data.reduce((acc, item) => acc + parseFloat(item.tracked), 0);
+    const totalBudget = Props.data.reduce((acc, item) => acc + parseFloat(item.budget), 0);
     
     const handleContainerPress = () => {
         if (editingIndex !== null) {
