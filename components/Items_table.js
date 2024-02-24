@@ -15,10 +15,14 @@ import { Picker } from '@react-native-picker/picker';
 const Items_table=Props=>{
      
     const [expensesData, setExpensesData] = useState(Props.data|| []);
+    
     const [editingIndex, setEditingIndex] = useState(null);
     const [updatedBudget, setUpdatedBudget] = useState("");
     const totalTracked = Props.data.reduce((acc, item) => acc + parseFloat(item.tracked), 0);
     const totalBudget = Props.data.reduce((acc, item) => acc + parseFloat(item.budget), 0);
+
+    useEffect(() => { setExpensesData(Props.data) }, [])
+    console.log("expensesData "+expensesData+Props.data)
     
     const handleContainerPress = () => {
         if (editingIndex !== null) {
@@ -140,7 +144,7 @@ const Items_table=Props=>{
                 <View>
                     <FlatList
                         style={{ height: 300 }}
-                        data={Props.data}
+                        data={expensesData}
                         keyExtractor={(item) => item._id}
                         renderItem={renderItem}
                     />
