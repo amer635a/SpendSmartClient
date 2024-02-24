@@ -87,13 +87,14 @@ const ExpensesDetails = ({ route, navigation }) => {
         // Fetch available dates from the server
 
         const fetchExpensesData =async () => {
+            var currentDate = new Date();
  
             console.log("---fetchExpensesData", yearNumber, " ", monthNumber, " ---");
         
             const response_get_expenses = await axios.post(`${HOST}/api/getExpenses`, {
               user_id: '64d373c5bf764a582023e5f7',
-              yearNumber: yearNumber,
-              monthNumber: monthNumber+""
+              yearNumber: currentDate.getFullYear(),
+              monthNumber: currentDate.getMonth()+1+""
             });
             setExpensesData(response_get_expenses.data.expenses)|| [];
          
