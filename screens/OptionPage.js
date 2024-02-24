@@ -32,7 +32,7 @@ const OptionPage = ({ navigation }) => {
   const [minuteCurrent, setMinuteCurrent] = useState(0);
   const [expensesData, setExpensesData] = useState([]);
 
-  const [isLastMonthProcessActive, setIsLastMonthProcessActive] = useState(true);
+  const [isLastMonthProcessActive, setIsLastMonthProcessActive] = useState(false);
 
   const handleGoals = async () => {
     navigation.navigate("GoalManagement");
@@ -151,14 +151,14 @@ const OptionPage = ({ navigation }) => {
             <Text style={styles.subtitle}>Smart</Text>
 
           </View>
- 
+          {true===isLastMonthProcessActive &&(
           <Modal_Last_month_process
             Visible={isLastMonthProcessActive}
             expensesData={expensesData}
             func_getExpenses={getExpenses}
 
           /> 
-             
+          ) } 
           
           <View style={styles.buttonContainerStyle}>
             <Text style={styles.selectOptionText}>Select An Option</Text>
