@@ -1,8 +1,17 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
+var is_Visible=true
 
 const Modal_Last_month_process=Props=>{
+    console.log("Props.Visible "+Props.Visible)
+    console.log("1is_Visible "+ is_Visible)
+    is_Visible=false
+    console.log("2is_Visible "+ is_Visible)
     const [modalVisible, setModalVisible] = useState(Props.Visible);
+    
+    console.log("--- modalVisible "+modalVisible)
+    useEffect(() => { setModalVisible(Props.Visible) }, [])
+    console.log("--- modalVisible "+modalVisible) 
     return (
       <View style={styles.centeredView}>
         <Modal
@@ -13,7 +22,6 @@ const Modal_Last_month_process=Props=>{
             Alert.alert('Modal has been closed.');
             setModalVisible(!modalVisible);
           }}>
-
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <Text style={styles.modalText}>Hello World!</Text>
@@ -24,9 +32,12 @@ const Modal_Last_month_process=Props=>{
               </Pressable>
             </View>
           </View>
-
         </Modal>
-       
+        <Pressable
+          style={[styles.button, styles.buttonOpen]}
+          onPress={() => setModalVisible(true)}>
+          <Text style={styles.textStyle}>Show Modal</Text>
+        </Pressable>
       </View>
     );
   };
@@ -59,7 +70,9 @@ const styles = StyleSheet.create({
       padding: 10,
       elevation: 2,
     },
-     
+    buttonOpen: {
+      backgroundColor: '#F194FF',
+    },
     buttonClose: {
       backgroundColor: '#2196F3',
     },

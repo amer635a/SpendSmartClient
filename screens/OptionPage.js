@@ -7,6 +7,8 @@ import { HOST } from '../network';
 
 import Modal_Last_month_process  from '../components/Modal_Last_month_process';
 
+var isLastMonthProcessActive_1=false
+
 const OptionPage = ({ navigation }) => {
   const user_id = '64d373c5bf764a582023e5f7';
 
@@ -16,16 +18,21 @@ const OptionPage = ({ navigation }) => {
   const DayProcess=23
   const HourProcess=23;
   const MinuteProcess=10;
+  // Create a Date object for "24/02/2024 9:42"
+  var processDate = new Date(2024, 1, 24, 9, 42); // Note: Months are zero-based in JavaScript, so February is represented by 1
+
 
   //Previuos Month
-  const [yearNumber, setPrevYear] = useState(0);
-  const [monthNumber, setPrevMonth] = useState(0);
+  const [PrevYear, setPrevYear] = useState(0);
+  const [PrevMonth, setPrevMonth] = useState(0);
+
 
   const [dayCurrent, setDayCurrent] = useState(0);
   const [hourCurrent, setHourCurrent] = useState(0);
   const [minuteCurrent, setMinuteCurrent] = useState(0);
+  const [expensesData, setExpensesData] = useState([]);
 
-  const [is_last_month_process_active, set_is_last_month_process_active] = useState(false);
+  const [isLastMonthProcessActive, setIsLastMonthProcessActive] = useState(true);
 
   const handleGoals = async () => {
     navigation.navigate("GoalManagement");
@@ -44,29 +51,70 @@ const OptionPage = ({ navigation }) => {
   const fetch_value_of_last_Month_process=()=>{
     return is_client_update_Last_Month_Process
   }
-  const LastMonthProcess =async () => {
+  
+
+  const getExpenses =async () => {
+
+    var currentDate = new Date();
+
+    // Get the last month
+    var lastMonth = new Date(currentDate);
+    lastMonth.setMonth(lastMonth.getMonth() - 1);
+    if (lastMonth.getMonth() === 11) { // If the last month is December, adjust the year
+        lastMonth.setFullYear(lastMonth.getFullYear() - 1);
+    }
+
+    // Extract year and month values
+    const lastMonthValue = lastMonth.getMonth() + 1; // Months are zero-indexed, so add 1
+    const yearValue = lastMonth.getFullYear();
+
+    console.log("---getExpenses last month process ", yearValue, " ", lastMonthValue, " ---");
+
+    const response_get_expenses = await axios.post(`${HOST}/api/getExpenses`, { user_id, yearValue, lastMonthValue });
+    setExpensesData(response_get_expenses.data.expenses);
+
+    console.log(expensesData);
+    console.log("----------------------------------");
+
+    return expensesData;
+
+  }  
+
+
+  const LastMonthProcess = () => {
+    console.log("check Last Month Process ")
     resp=fetch_value_of_last_Month_process()
     if (true==resp)
-        return 
-
-    console.log("Current "+dayCurrent+" "+hourCurrent+"   "+ minuteCurrent)
-    console.log("Process "+DayProcess+" "+HourProcess+"   "+ MinuteProcess)
-
-    if (dayCurrent >= DayProcess  && hourCurrent>=HourProcess && minuteCurrent >= MinuteProcess) {
-      try {
+    {
+      return 
+    }  
+    var currentDate = new Date();
+    // Compare the processDate with the currentDate
+    if (processDate > currentDate) 
+    {
+      return;
+    } 
+    else (processDate <= currentDate) 
+    {
+      try 
+      {
         console.log("active Last Month Process ")
-        const resp = await axios.post(`${HOST}/api/getExpenses`, { user_id, yearNumber, monthNumber });
-        set_is_last_month_process_active(true)
-         
-    } catch (error) {
+        setIsLastMonthProcessActive(true)
+        console.log("isLastMonthProcessActive "+isLastMonthProcessActive)
+        getExpenses()
+ 
+      } 
+      catch (error) 
+      {
         console.error("Error fetching expenses data:", error);
-    }
-    }
+      }
+    }  
 };
 
 
   useEffect(() => {
     const currentDate = new Date();
+    console.log(currentDate.toString());
     const pastMonthDate = new Date(currentDate);
 
     pastMonthDate.setMonth(currentDate.getMonth() );
@@ -74,15 +122,13 @@ const OptionPage = ({ navigation }) => {
     setPrevYear(pastMonthDate.getFullYear().toString());
     setPrevMonth((pastMonthDate.getMonth()).toString()); 
 
-    setDayCurrent((currentDate.getDate()))
-    setHourCurrent((currentDate.getHours()))
-    setMinuteCurrent((currentDate.getMinutes()))
-    
     LastMonthProcess();
     
-     
+   
 
   }, []); 
+ 
+   
 
   return (
 
@@ -104,19 +150,13 @@ const OptionPage = ({ navigation }) => {
             <Text style={styles.subtitle}>Smart</Text>
 
           </View>
+ 
+          <Modal_Last_month_process
+            Visible={isLastMonthProcessActive}
+            expensesData={expensesData}
+          /> 
+             
           
-              {true===is_last_month_process_active?
-                (
-                    <Modal_Last_month_process
-                    Visible={is_last_month_process_active}
-                    />
-                ):
-                (
-                    <Modal_Last_month_process
-                    Visible={is_last_month_process_active}
-                    />
-                )
-              }
           <View style={styles.buttonContainerStyle}>
             <Text style={styles.selectOptionText}>Select An Option</Text>
             
@@ -138,7 +178,7 @@ const OptionPage = ({ navigation }) => {
       </View>
 
       <FooterList />
-      
+        
     </SafeAreaView>
   );
 };
