@@ -13,8 +13,6 @@ const ExpensesInsert = ({ route,navigation }) => {
   const [budget, setBudget] = useState("");
   const [yearNumber, setYearNumber] = useState("");
   const [monthNumber, setMonthNumber] = useState("");
-  console.log("route.params year ",route.params.yearNumber)
-  console.log("route.params month ",route.params.monthNumber)
 
   useEffect(() => {
     const currentDate = new Date();
