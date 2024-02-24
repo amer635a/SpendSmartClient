@@ -21,9 +21,17 @@ const Items_table=Props=>{
     
 
     useEffect(() => { setExpensesData(Props.data) }, [Props.data])
-     
-    const totalTracked = expensesData.reduce((acc, item) => acc + parseFloat(item.tracked), 0);
-    const totalBudget = expensesData.reduce((acc, item) => acc + parseFloat(item.budget), 0);
+    
+    try 
+    {
+        var totalTracked = expensesData.reduce((acc, item) => acc + parseFloat(item.tracked), 0);
+        var totalBudget = expensesData.reduce((acc, item) => acc + parseFloat(item.budget), 0);
+    }
+    catch (error) 
+    {
+        var totalTracked = 0
+        var totalBudget = 0
+    }
     
 
     const handleContainerPress = () => {
