@@ -1,5 +1,6 @@
 import React, {useState,useEffect} from 'react';
 import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
+import Items_table  from '../components/Items_table';
 var is_Visible=true
 
 const Modal_Last_month_process=Props=>{
@@ -12,6 +13,7 @@ const Modal_Last_month_process=Props=>{
     console.log("--- modalVisible "+modalVisible)
     useEffect(() => { setModalVisible(Props.Visible) }, [])
     console.log("--- modalVisible "+modalVisible) 
+    
     return (
       <View style={styles.centeredView}>
         <Modal
@@ -25,14 +27,22 @@ const Modal_Last_month_process=Props=>{
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <Text style={styles.modalText}>Hello World!</Text>
+              <Items_table 
+                    data={Props.expensesData}
+                    yearNumber={2024}
+                    monthNumber={"1"}
+                    />
               <Pressable
                 style={[styles.button, styles.buttonClose]}
                 onPress={() => setModalVisible(!modalVisible)}>
-                <Text style={styles.textStyle}>Hide Modal</Text>
+                
+                <Text style={styles.textStyle}>Next</Text>
               </Pressable>
             </View>
           </View>
         </Modal>
+
+        
         <Pressable
           style={[styles.button, styles.buttonOpen]}
           onPress={() => setModalVisible(true)}>
@@ -47,7 +57,7 @@ const styles = StyleSheet.create({
     centeredView: {
       flex: 1,
       justifyContent: 'center',
-      alignItems: 'center',
+       
       marginTop: 22,
     },
     modalView: {
@@ -55,7 +65,7 @@ const styles = StyleSheet.create({
       backgroundColor: 'white',
       borderRadius: 20,
       padding: 35,
-      alignItems: 'center',
+      
       shadowColor: '#000',
       shadowOffset: {
         width: 0,
@@ -75,6 +85,7 @@ const styles = StyleSheet.create({
     },
     buttonClose: {
       backgroundColor: '#2196F3',
+      margin: 15
     },
     textStyle: {
       color: 'white',

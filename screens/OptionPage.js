@@ -70,12 +70,15 @@ const OptionPage = ({ navigation }) => {
 
     console.log("---getExpenses last month process ", yearValue, " ", lastMonthValue, " ---");
 
-    const response_get_expenses = await axios.post(`${HOST}/api/getExpenses`, { user_id, yearValue, lastMonthValue });
-    setExpensesData(response_get_expenses.data.expenses);
+    const response_get_expenses = await axios.post(`${HOST}/api/getExpenses`, {
+      user_id: '64d373c5bf764a582023e5f7',
+      yearNumber: yearValue,
+      monthNumber: lastMonthValue+""
+    });
+    setExpensesData(response_get_expenses.data.expenses)|| [];
 
-    console.log(expensesData);
-    console.log("----------------------------------");
-
+    console.log(response_get_expenses);
+    
     return expensesData;
 
   }  
