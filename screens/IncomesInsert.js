@@ -7,21 +7,21 @@ import axios from 'axios';
 import { HOST } from '../network';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const IncomesInsert = ({ navigation }) => {
+const IncomesInsert = ({ route,navigation }) => {
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [percentage, setPercentage] = useState("");
   const [tracked, setTracked] = useState("");
   const [yearNumber, setYearNumber] = useState("");
   const [monthNumber, setMonthNumber] = useState("");
+  
 
   useEffect(() => {
     const currentDate = new Date();
-    const pastMonthDate = new Date(currentDate);
-    pastMonthDate.setMonth(currentDate.getMonth() - 1);
-
-    setYearNumber(pastMonthDate.getFullYear().toString());
-    setMonthNumber((pastMonthDate.getMonth() + 1).toString()); // Months are 0-based
+    setYearNumber(route.params.yearNumber);
+    setMonthNumber(route.params.monthNumber); // Months are 0-based
+    console.log("useEffect -> yearNumber ",route.params.yearNumber," monthNumber",route.params.monthNumber)
+ 
   }, []); // Empty dependency array to ensure it runs only once on component mount
   const user_id = '64d373c5bf764a582023e5f7';
   const handleViewIncomes = async () => {
@@ -40,7 +40,7 @@ const IncomesInsert = ({ navigation }) => {
     }
     
     try {
-      console.log("soso2")
+      console.log("axios insertIncomes send -> yearNumber ",yearNumber," monthNumber",monthNumber)
       const resp = await axios.post(`${HOST}/api/insertIncomes`, {
         user_id,
         name,
@@ -50,14 +50,15 @@ const IncomesInsert = ({ navigation }) => {
         yearNumber,
         monthNumber,
       });
-      console.log("soso1")
+      console.log(resp.data.message)
       await AsyncStorage.setItem("auth-rn", JSON.stringify(resp.data));
+      alert("Insert Successfully");
     } 
     catch (error) {
       console.error(error);
       alert("An error occurred. Please try again later.");
     }
-    
+    console.log("Insert Successfully")
   };
 
   return (

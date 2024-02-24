@@ -22,7 +22,7 @@
         pastMonthDate.setMonth(currentDate.getMonth() );
     
         setYearNumber(pastMonthDate.getFullYear().toString());
-        setMonthNumber((pastMonthDate.getMonth()  ).toString()); // Months are 0-based
+        setMonthNumber((pastMonthDate.getMonth() + 1).toString()); // Months are 0-based
       }, []); // Empty dependency array to ensure it runs only once on component mount  
 
       

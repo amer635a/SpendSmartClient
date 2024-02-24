@@ -55,7 +55,7 @@ const ExpensesInsert = ({ route,navigation }) => {
         yearNumber,
         monthNumber,
       });
-
+      
       await AsyncStorage.setItem("auth-rn", JSON.stringify(resp.data));
       alert("Insert Successfully");
     } catch (error) {

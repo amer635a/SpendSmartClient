@@ -8,6 +8,10 @@ import { LinearGradient } from 'expo-linear-gradient';
  import Items_table  from '../components/Items_table_income';
  import { useIsFocused } from '@react-navigation/native';
 
+
+ var selectedYearNumber_v=0
+ var selectedMonthNumber_v=0
+
 const IncomesDetails = ({ route, navigation }) => {
     const [incomesData, setIncomesData] = useState(route.params.incomesData.incomes || []);
    
@@ -18,7 +22,7 @@ const IncomesDetails = ({ route, navigation }) => {
     
     const [yearNumber, setYearNumber] = useState("");
     const [monthNumber, setMonthNumber] = useState("");
-     
+
 
     const ComboBox = ({ options, onSelect }) => {
         const [showDropdown, setShowDropdown] = useState(false);
@@ -96,8 +100,8 @@ const IncomesDetails = ({ route, navigation }) => {
     };
     const handleDateSelect = async (selectedDate) => {
         const [year, month] = selectedDate.split("-");
-        setYearNumber(year);
-        setMonthNumber(month);
+        selectedYearNumber_v=year
+        selectedMonthNumber_v=month
         try {
             // Fetch incomes data for the selected date
             const response = await axios.post(`${HOST}/api/getIncomes`, {
@@ -112,6 +116,7 @@ const IncomesDetails = ({ route, navigation }) => {
             console.error("Error fetching incomes data:", error);
             Alert.alert("Error", "An error occurred while fetching incomes data. Please try again.");
         }
+        console.log("handleDateSelect year",selectedYearNumber_v," monthNumber ",selectedMonthNumber_v )
     };
 
     const fetchIncomesData =async () => {
@@ -137,8 +142,8 @@ const IncomesDetails = ({ route, navigation }) => {
       const pastMonthDate = new Date(currentDate);
       pastMonthDate.setMonth(currentDate.getMonth() - 1);
   
-      setYearNumber(pastMonthDate.getFullYear().toString());
-      setMonthNumber((pastMonthDate.getMonth() + 1).toString()); // Months are 0-based
+      setYearNumber(currentDate.getFullYear().toString());
+      setMonthNumber((currentDate.getMonth() + 1).toString()); // Months are 0-based
 
       fetchAvailableDates();
       if(isFocused){
@@ -186,8 +191,8 @@ const IncomesDetails = ({ route, navigation }) => {
 
                 <Items_table 
                     data={incomesData}
-                    yearNumber={"2024"}
-                    monthNumber={"1"}
+                    yearNumber={selectedYearNumber_v}
+                    monthNumber={selectedMonthNumber_v}
                     />
 
                 <View style={{ marginBottom: 20 }}></View>
@@ -200,7 +205,10 @@ const IncomesDetails = ({ route, navigation }) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                 onPress={() => {
-                    navigation.navigate("IncomesInsert");
+                    navigation.navigate("IncomesInsert", {  
+                            yearNumber: yearNumber,
+                            monthNumber:monthNumber
+                          });
                 }}
                 style={styles.iconButton}
             >
