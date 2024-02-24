@@ -23,8 +23,41 @@ const Items_table=Props=>{
     const handleContainerPress = () => {
         if (editingIndex !== null) {
             setEditingIndex(null);
+            
         }
     };
+
+    const handleDeleteExpense = async (expenseId) => {
+        Alert.alert(
+            "Confirm Deletion",
+            "Are you sure you want to delete this expense?",
+            [ 
+                {
+                    text: "Cancel",
+                    style: "cancel",
+                },
+                {
+                    text: "Delete",
+                    onPress: async () => {
+                        try {
+                            const response = await axios.delete(`${HOST}/api/deleteExpense/${expenseId}`);
+                            if (response.data.message === "Expense deleted successfully") {
+                                Alert.alert("Success", "Expense deleted successfully!");
+                                const updatedExpensesData = expensesData.filter((expense) => expense._id !== expenseId);
+                                setExpensesData(updatedExpensesData);
+                            } else {
+                                Alert.alert("Error", "Failed to delete expense. Please try again.");
+                            }
+                        } catch (error) {
+                            console.error("Error deleting expense:", error);
+                            Alert.alert("Error", "An error occurred. Please try again.");
+                        }
+                    },
+                },
+            ]
+        );
+    };
+
     const handleSaveBudget = async (index, item) => {
          
         try {
@@ -60,6 +93,7 @@ const Items_table=Props=>{
         console.log(expensesData[index].budget)
         setUpdatedBudget(expensesData[index].budget);
     };
+
 
     const renderItem = ({ item, index }) => (
         <TouchableWithoutFeedback onPress={handleContainerPress}>

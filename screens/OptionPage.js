@@ -67,17 +67,17 @@ const OptionPage = ({ navigation }) => {
     // Extract year and month values
     const lastMonthValue = lastMonth.getMonth() + 1; // Months are zero-indexed, so add 1
     const yearValue = lastMonth.getFullYear();
-    
+
     console.log("---getExpenses last month process ", yearValue, " ", lastMonthValue, " ---");
 
     const response_get_expenses = await axios.post(`${HOST}/api/getExpenses`, {
       user_id: '64d373c5bf764a582023e5f7',
       yearNumber: yearValue,
-      monthNumber: lastMonthValue+""
+      monthNumber: (lastMonthValue+1)+""
     });
     setExpensesData(response_get_expenses.data.expenses)|| [];
  
-    return expensesData;
+    return response_get_expenses.data.expenses;
 
   }  
 
@@ -155,6 +155,8 @@ const OptionPage = ({ navigation }) => {
           <Modal_Last_month_process
             Visible={isLastMonthProcessActive}
             expensesData={expensesData}
+            func_getExpenses={getExpenses}
+
           /> 
              
           
