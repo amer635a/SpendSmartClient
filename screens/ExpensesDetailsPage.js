@@ -10,6 +10,7 @@ import { Ionicons, Feather } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 import Items_table  from '../components/Items_table';
+import { useIsFocused } from '@react-navigation/native';
 
 const ExpensesDetails = ({ route, navigation }) => {
     const [yearNumber, setYearNumber] = useState("");
@@ -79,11 +80,30 @@ const ExpensesDetails = ({ route, navigation }) => {
             Alert.alert("Error", "An error occurred while fetching expenses data. Please try again.");
         }
     };
-
+    const isFocused = useIsFocused();
     useEffect(() => {
         const currentDate = new Date();
         console.log("hgh",currentDate.getMonth())
         // Fetch available dates from the server
+
+        const fetchExpensesData =async () => {
+ 
+            console.log("---fetchExpensesData", yearNumber, " ", monthNumber, " ---");
+        
+            const response_get_expenses = await axios.post(`${HOST}/api/getExpenses`, {
+              user_id: '64d373c5bf764a582023e5f7',
+              yearNumber: yearNumber,
+              monthNumber: monthNumber+""
+            });
+            setExpensesData(response_get_expenses.data.expenses)|| [];
+         
+            return response_get_expenses.data.expenses;
+        
+          }  
+
+
+
+
         const fetchAvailableDates = async () => {
             try {
                 const userId = '64d373c5bf764a582023e5f7';
@@ -122,7 +142,13 @@ const ExpensesDetails = ({ route, navigation }) => {
         };
 
         fetchAvailableDates();
-    }, []); // Empty dependency array to ensure it runs only once on component mount
+
+        if(isFocused){
+            fetchExpensesData()
+            console.log("i am in ExpensesDetailsPage......................... ^)^")
+          }
+
+    }, [isFocused]); // Empty dependency array to ensure it runs only once on component mount
 
 
 
