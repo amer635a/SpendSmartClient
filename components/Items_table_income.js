@@ -55,7 +55,7 @@ const Items_table=Props=>{
                     onPress: async () => {
                         try {
                             const response = await axios.delete(`${HOST}/api/deleteIncome/${incomeId}`);
-                            if (response.data.message === "income deleted successfully") {
+                            if (response.data.message === "Income deleted successfully") {
                                 Alert.alert("Success", "income deleted successfully!");
                                 const updatedIncomesData = incomesData.filter((income) => income._id !== incomeId);
                                 setIncomesData(updatedIncomesData);
