@@ -41,10 +41,10 @@ const Items_table=Props=>{
         }
     };
 
-    const handleDeleteExpense = async (expenseId) => {
+    const handleDeleteIncome= async (incomeId) => {
         Alert.alert(
             "Confirm Deletion",
-            "Are you sure you want to delete this expense?",
+            "Are you sure you want to delete this income?",
             [ 
                 {
                     text: "Cancel",
@@ -54,16 +54,16 @@ const Items_table=Props=>{
                     text: "Delete",
                     onPress: async () => {
                         try {
-                            const response = await axios.delete(`${HOST}/api/deleteExpense/${expenseId}`);
-                            if (response.data.message === "Expense deleted successfully") {
-                                Alert.alert("Success", "Expense deleted successfully!");
-                                const updatedIncomesData = incomesData.filter((expense) => expense._id !== expenseId);
+                            const response = await axios.delete(`${HOST}/api/deleteIncome/${incomeId}`);
+                            if (response.data.message === "income deleted successfully") {
+                                Alert.alert("Success", "income deleted successfully!");
+                                const updatedIncomesData = incomesData.filter((income) => income._id !== incomeId);
                                 setIncomesData(updatedIncomesData);
                             } else {
-                                Alert.alert("Error", "Failed to delete expense. Please try again.");
+                                Alert.alert("Error", "Failed to delete income. Please try again.");
                             }
                         } catch (error) {
-                            console.error("Error deleting expense:", error);
+                            console.error("Error deleting income:", error);
                             Alert.alert("Error", "An error occurred. Please try again.");
                         }
                     },
@@ -73,10 +73,10 @@ const Items_table=Props=>{
     };
 
     const handleSaveAmount = async (index, item) => {
-         
+        
         try {
             const response = await axios.put(
-                `${HOST}/api/updateAmount /${item._id}`,
+                `${HOST}/api/updateAmount/${item._id}`,
                 {
                     newAmount : updatedAmount ,
                     yearNumber: Props.yearNumber,
@@ -136,7 +136,7 @@ const Items_table=Props=>{
                 )}
                 <Text style={styles.cell}>{item.tracked}</Text>
                 <Text style={styles.cell}>{item.name}</Text>
-                <TouchableOpacity onPress={() => handleDeleteExpense(item._id)}>
+                <TouchableOpacity onPress={() => handleDeleteIncome(item._id)}>
                     <Feather name="trash-2" size={20} color="blue" />
                 </TouchableOpacity>
             </View>

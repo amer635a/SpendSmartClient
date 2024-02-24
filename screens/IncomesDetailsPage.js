@@ -10,8 +10,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const IncomesDetails = ({ route, navigation }) => {
     const [incomesData, setIncomesData] = useState(route.params.incomesData.incomes || []);
-    console.log(route.params.incomesData)
-     
+   
     const [editingIndex, setEditingIndex] = useState(null);
     const [updatedBudget, setUpdatedBudget] = useState("");
     const [availableDates, setAvailableDates] = useState([]);
@@ -127,20 +126,13 @@ const IncomesDetails = ({ route, navigation }) => {
           yearNumber: curentYearValue,
           monthNumber: currentMonthValue
         });
-
-        console.log("*------------*")
-        console.log(response_get_incomes)
-        console.log("*------------*")
         setIncomesData(response_get_incomes.data.incomes|| []);
-     
         return response_get_incomes.data.incomes;
-    
       }  
 
     const isFocused = useIsFocused();
-    useEffect(() => {
 
-  
+    useEffect(() => {
       const currentDate = new Date();
       const pastMonthDate = new Date(currentDate);
       pastMonthDate.setMonth(currentDate.getMonth() - 1);
@@ -153,7 +145,6 @@ const IncomesDetails = ({ route, navigation }) => {
         fetchIncomesData()
         console.log("i am in IncomesDetailsPage......................... ^_^")
       }
-
     }, [isFocused]); // Empty dependency array to ensure it runs only once on component mount
 
     const handleViewIncomesReport = async () => {
