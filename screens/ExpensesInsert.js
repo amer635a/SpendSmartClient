@@ -7,20 +7,24 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { HOST } from '../network';
 
-const ExpensesInsert = ({ navigation }) => {
+const ExpensesInsert = ({ route,navigation }) => {
   const [name, setName] = useState("");
   const [tracked, setTracked] = useState("");
   const [budget, setBudget] = useState("");
   const [yearNumber, setYearNumber] = useState("");
   const [monthNumber, setMonthNumber] = useState("");
+  console.log("route.params year ",route.params.yearNumber)
+  console.log("route.params month ",route.params.monthNumber)
 
   useEffect(() => {
     const currentDate = new Date();
     const pastMonthDate = new Date(currentDate);
     pastMonthDate.setMonth(currentDate.getMonth() );
 
-    setYearNumber(pastMonthDate.getFullYear().toString());
-    setMonthNumber((pastMonthDate.getMonth() + 1).toString()); // Months are 0-based
+    // setYearNumber(pastMonthDate.getFullYear().toString());
+    // setMonthNumber((pastMonthDate.getMonth() + 1).toString()); // Months are 0-based
+    setYearNumber(route.params.yearNumber);
+    setMonthNumber(route.params.monthNumber); // Months are 0-based
   }, []); // Empty dependency array to ensure it runs only once on component mount
   const user_id = '64d373c5bf764a582023e5f7';
 

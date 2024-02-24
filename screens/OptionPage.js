@@ -19,7 +19,7 @@ const OptionPage = ({ navigation }) => {
   const HourProcess=23;
   const MinuteProcess=10;
   // Create a Date object for "24/02/2024 9:42"
-  var processDate = new Date(2024, 1, 24, 9, 42); // Note: Months are zero-based in JavaScript, so February is represented by 1
+  var processDate = new Date(2024, 1, 25, 9, 42); // Note: Months are zero-based in JavaScript, so February is represented by 1
 
 
   //Previuos Month

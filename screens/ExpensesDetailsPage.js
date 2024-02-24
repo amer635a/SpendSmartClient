@@ -171,7 +171,10 @@ const ExpensesDetails = ({ route, navigation }) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => {
-                        navigation.navigate("ExpensesInsert");
+                        navigation.navigate("ExpensesInsert", {  
+                            yearNumber: yearNumber,
+                            monthNumber:monthNumber
+                          });
                     }}
                     style={styles.iconButton}
                 >
