@@ -13,7 +13,7 @@ import { Picker } from '@react-native-picker/picker';
 
 
 const Items_table=Props=>{
-   
+     
     const [expensesData, setExpensesData] = useState(Props.data|| []);
     const [editingIndex, setEditingIndex] = useState(null);
     const [updatedBudget, setUpdatedBudget] = useState("");
@@ -57,7 +57,8 @@ const Items_table=Props=>{
 
     const handleEditBudget = (index) => {
         setEditingIndex(index);
-        setUpdatedBudget(expensesData[index].budget.toString());
+        console.log(expensesData[index].budget)
+        setUpdatedBudget(expensesData[index].budget);
     };
 
     const renderItem = ({ item, index }) => (

@@ -1,16 +1,13 @@
 import React, {useState,useEffect} from 'react';
 import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
 import Items_table  from '../components/Items_table';
-var is_Visible=true
+ 
 
 const Modal_Last_month_process=Props=>{
-    console.log("Props.Visible "+Props.Visible)
-    console.log("1is_Visible "+ is_Visible)
-    is_Visible=false
-    console.log("2is_Visible "+ is_Visible)
-    const [modalVisible, setModalVisible] = useState(Props.Visible);
+ 
     
-    console.log("--- modalVisible "+modalVisible)
+    const [modalVisible, setModalVisible] = useState(Props.Visible);
+     
     useEffect(() => { setModalVisible(Props.Visible) }, [])
     console.log("--- modalVisible "+modalVisible) 
     

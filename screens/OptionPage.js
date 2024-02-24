@@ -67,7 +67,7 @@ const OptionPage = ({ navigation }) => {
     // Extract year and month values
     const lastMonthValue = lastMonth.getMonth() + 1; // Months are zero-indexed, so add 1
     const yearValue = lastMonth.getFullYear();
-
+    
     console.log("---getExpenses last month process ", yearValue, " ", lastMonthValue, " ---");
 
     const response_get_expenses = await axios.post(`${HOST}/api/getExpenses`, {
@@ -76,9 +76,7 @@ const OptionPage = ({ navigation }) => {
       monthNumber: lastMonthValue+""
     });
     setExpensesData(response_get_expenses.data.expenses)|| [];
-
-    console.log(response_get_expenses);
-    
+ 
     return expensesData;
 
   }  
