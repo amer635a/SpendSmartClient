@@ -73,7 +73,7 @@ const OptionPage = ({ navigation }) => {
     const response_get_expenses = await axios.post(`${HOST}/api/getExpenses`, {
       user_id: '64d373c5bf764a582023e5f7',
       yearNumber: yearValue,
-      monthNumber: (lastMonthValue+1)+""
+      monthNumber: (lastMonthValue)+""
     });
     setExpensesData(response_get_expenses.data.expenses)|| [];
  

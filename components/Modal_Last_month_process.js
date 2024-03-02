@@ -4,12 +4,33 @@ import Items_table  from '../components/Items_table';
  
 
 const Modal_Last_month_process=Props=>{
- 
-    
+
     const [modalVisible, setModalVisible] = useState(Props.Visible);
-     
-    useEffect(() => { setModalVisible(Props.Visible) }, [])
+
+
+    const [PrevYear, setPrevYear] = useState(0);
+    const [PrevMonth, setPrevMonth] = useState(0);
+    
+    useEffect(() => { setModalVisible(Props.Visible) 
+      const currentDate = new Date();
+      var lastMonth = new Date(currentDate);
+      lastMonth.setMonth(lastMonth.getMonth() - 1);
+      if (lastMonth.getMonth() === 11) { // If the last month is December, adjust the year
+          lastMonth.setFullYear(lastMonth.getFullYear() - 1);
+      }
+
+      // Extract year and month values
+      const lastMonthValue = lastMonth.getMonth() + 1; // Months are zero-indexed, so add 1
+      const yearValue = lastMonth.getFullYear();
+  
+      setPrevYear(yearValue);
+      setPrevMonth(lastMonthValue); 
+      
+      
+    
+    }, [])
     console.log("--- modalVisible "+modalVisible) 
+    console.log("---Modal_Last_month_process ", PrevYear, " ", PrevMonth, " ---");
     
     return (
       <View style={styles.centeredView}>
@@ -26,8 +47,8 @@ const Modal_Last_month_process=Props=>{
               <Text style={styles.modalText}>Hello World!</Text>
               <Items_table 
                     data={Props.expensesData}
-                    yearNumber={2024}
-                    monthNumber={"1"}
+                    yearNumber={PrevYear}
+                    monthNumber={PrevMonth}
                     />
               <Pressable
                 style={[styles.button, styles.buttonClose]}
