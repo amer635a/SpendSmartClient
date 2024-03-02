@@ -100,7 +100,8 @@ const IncomesDetails = ({ route, navigation }) => {
     };
     const handleDateSelect = async (selectedDate) => {
         const [year, month] = selectedDate.split("-");
-
+        setYearNumber(year);
+        setMonthNumber(month);
         selectedYearNumber_v=year
         selectedMonthNumber_v=month
         try {
@@ -123,14 +124,16 @@ const IncomesDetails = ({ route, navigation }) => {
     const fetchIncomesData =async () => {
         var currentDate = new Date();
         var currentMonthValue=currentDate.getMonth()+1+""
-        currentMonthValue=1
+       
         var curentYearValue=currentDate.getFullYear()
+        selectedYearNumber_v=currentMonthValue
+        selectedMonthNumber_v=curentYearValue
         console.log("---fetchIncomesData", curentYearValue, " ", currentMonthValue, " ---");
     
         const response_get_incomes = await axios.post(`${HOST}/api/getIcomes`, {
           user_id: '64d373c5bf764a582023e5f7',
-          yearNumber: curentYearValue,
-          monthNumber: currentMonthValue
+          yearNumber: currentDate.getFullYear(),
+          monthNumber: currentDate.getMonth()+1+""
         });
         setIncomesData(response_get_incomes.data.incomes|| []);
         return response_get_incomes.data.incomes;
@@ -192,8 +195,8 @@ const IncomesDetails = ({ route, navigation }) => {
 
                 <Items_table 
                     data={incomesData}
-                    yearNumber={selectedYearNumber_v}
-                    monthNumber={selectedMonthNumber_v}
+                    yearNumber={yearNumber}
+                    monthNumber={monthNumber}
                     />
 
                 <View style={{ marginBottom: 20 }}></View>

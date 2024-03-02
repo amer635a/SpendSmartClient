@@ -88,8 +88,8 @@ const OptionPage = ({ navigation }) => {
     
     var curentYearValue=currentDate.getFullYear()
 
-    month="2"
-    year=2024
+    month=currentMonthValue
+    year=curentYearValue
     console.log("---fetchIncomesData", curentYearValue, " ", currentMonthValue, " ---");
     const response = await axios.post(`${HOST}/api/getIncomes`, {
       user_id: '64d373c5bf764a582023e5f7',
