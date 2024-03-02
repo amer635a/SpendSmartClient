@@ -94,13 +94,15 @@ const Modal_Last_month_process=Props=>{
                   /> 
               }
   
-              <View style={{flexDirection: 'row',}}  > 
+              <View style={{flexDirection: 'row',justifyContent:"center"}}  > 
+              { 
+                stageNumber!=0 &&
                 <Pressable
                     style={[styles.button, styles.buttonBack]}
                     onPress={() => nextStage()}>
                     <Text style={styles.textStyle}>Back</Text>
                 </Pressable>
-
+              } 
                 <Pressable
                   style={[styles.button, styles.buttonNext]}
                   onPress={() => backStage()}>
