@@ -31,6 +31,7 @@ const OptionPage = ({ navigation }) => {
   const [hourCurrent, setHourCurrent] = useState(0);
   const [minuteCurrent, setMinuteCurrent] = useState(0);
   const [expensesData, setExpensesData] = useState([]);
+  const [incomesData, setIncomesData] = useState(  []);
 
   const [isLastMonthProcessActive, setIsLastMonthProcessActive] = useState(false);
 
@@ -75,10 +76,30 @@ const OptionPage = ({ navigation }) => {
       yearNumber: yearValue,
       monthNumber: (lastMonthValue)+""
     });
-    setExpensesData(response_get_expenses.data.expenses)|| [];
+    
+    setExpensesData(response_get_expenses.data.expenses|| [])
  
     return response_get_expenses.data.expenses;
 
+  }  
+  const geticomesData =async () => {
+    var currentDate = new Date();
+    var currentMonthValue=currentDate.getMonth()+""
+    
+    var curentYearValue=currentDate.getFullYear()
+
+    month="1"
+    year=2024
+    console.log("---fetchIncomesData", curentYearValue, " ", currentMonthValue, " ---");
+    const response = await axios.post(`${HOST}/api/getIncomes`, {
+      user_id: '64d373c5bf764a582023e5f7',
+      yearNumber: year,
+      monthNumber: month
+  });
+ 
+    setIncomesData(response.data.incomes || []);
+    
+    return resp.data.incomes;
   }  
 
 
@@ -103,6 +124,7 @@ const OptionPage = ({ navigation }) => {
         setIsLastMonthProcessActive(true)
         console.log("isLastMonthProcessActive "+isLastMonthProcessActive)
         getExpenses()
+        geticomesData()
  
       } 
       catch (error) 
@@ -155,6 +177,7 @@ const OptionPage = ({ navigation }) => {
           <Modal_Last_month_process
             Visible={isLastMonthProcessActive}
             expensesData={expensesData}
+            incomesData={incomesData}
             func_getExpenses={getExpenses}
 
           /> 

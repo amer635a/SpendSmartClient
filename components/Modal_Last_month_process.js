@@ -1,17 +1,30 @@
 import React, {useState,useEffect} from 'react';
 import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
 import Items_table  from '../components/Items_table';
- 
+import Items_table_income  from '../components/Items_table_income';
+import { useIsFocused } from '@react-navigation/native';
 
 const Modal_Last_month_process=Props=>{
 
     const [modalVisible, setModalVisible] = useState(Props.Visible);
-
+    //onPress={() => setModalVisible(!modalVisible)}>
 
     const [PrevYear, setPrevYear] = useState(0);
     const [PrevMonth, setPrevMonth] = useState(0);
-    
-    useEffect(() => { setModalVisible(Props.Visible) 
+
+    const [stageNumber, setStageNumber] = useState(0);
+
+    const [stageExpenses, setStageExpenses] = useState(true);
+    const [stageIncome, setStageIncome] = useState(false);
+    const [stageChooiceRatio,setStageChooiceRatio]= useState(false);
+    const [stageInvestment,setStageInvestment]= useState(false);
+    const [stageSavingMoney,setStageSavingMoney]= useState(false);
+ 
+ 
+    useEffect(() => 
+    { 
+      
+      setModalVisible(Props.Visible) 
       const currentDate = new Date();
       var lastMonth = new Date(currentDate);
       lastMonth.setMonth(lastMonth.getMonth() - 1);
@@ -25,13 +38,31 @@ const Modal_Last_month_process=Props=>{
   
       setPrevYear(yearValue);
       setPrevMonth(lastMonthValue); 
-      
-      
-    
+ 
     }, [])
     console.log("--- modalVisible "+modalVisible) 
     console.log("---Modal_Last_month_process ", PrevYear, " ", PrevMonth, " ---");
     
+
+    const nextStage = () => {
+      if(stageNumber >0){
+        var stageNumber_temp=stageNumber-1
+        setStageNumber(stageNumber_temp)
+      }
+    }
+
+    const backStage = () => {
+      // add max stages
+      var stageNumber_temp=stageNumber+1
+      setStageNumber(stageNumber_temp)
+    }
+
+    const closeStage = () => {
+      setModalVisible(!modalVisible)
+
+    }
+
+
     return (
       <View style={styles.centeredView}>
         <Modal
@@ -45,17 +76,45 @@ const Modal_Last_month_process=Props=>{
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <Text style={styles.modalText}>Hello World!</Text>
-              <Items_table 
-                    data={Props.expensesData}
-                    yearNumber={PrevYear}
-                    monthNumber={PrevMonth}
-                    />
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}>
+
+              { 
+                stageNumber===0 &&
+                <Items_table 
+                      data={Props.expensesData}
+                      yearNumber={PrevYear}
+                      monthNumber={PrevMonth}
+                      />
+              }
+              {
+                stageNumber===1 &&
+                  <Items_table_income 
+                  data={Props.incomesData}
+                  yearNumber={PrevYear}
+                  monthNumber={PrevMonth}
+                  /> 
+              }
+  
+              <View style={{flexDirection: 'row',}}  > 
+                <Pressable
+                    style={[styles.button, styles.buttonBack]}
+                    onPress={() => nextStage()}>
+                    <Text style={styles.textStyle}>Back</Text>
+                </Pressable>
+
+                <Pressable
+                  style={[styles.button, styles.buttonNext]}
+                  onPress={() => backStage()}>
+                  <Text style={styles.textStyle}>Next</Text>
+                </Pressable>
+
                 
-                <Text style={styles.textStyle}>Next</Text>
-              </Pressable>
+              </View>
+              <Pressable
+                  style={[styles.button, styles.buttonNext]}
+                  onPress={() => closeStage()}>
+                  <Text style={styles.textStyle}>close</Text>
+                </Pressable>
+
             </View>
           </View>
         </Modal>
@@ -101,9 +160,17 @@ const styles = StyleSheet.create({
     buttonOpen: {
       backgroundColor: '#F194FF',
     },
-    buttonClose: {
+    buttonNext: {
       backgroundColor: '#2196F3',
-      margin: 15
+      marginTop:12,
+      margin: 5,
+      width:"45%"
+    },
+    buttonBack:{
+      backgroundColor: 'red',
+      marginTop:12,
+      margin: 5,
+      width:"45%"
     },
     textStyle: {
       color: 'white',
