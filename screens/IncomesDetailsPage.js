@@ -100,6 +100,7 @@ const IncomesDetails = ({ route, navigation }) => {
     };
     const handleDateSelect = async (selectedDate) => {
         const [year, month] = selectedDate.split("-");
+
         selectedYearNumber_v=year
         selectedMonthNumber_v=month
         try {
@@ -203,11 +204,11 @@ const IncomesDetails = ({ route, navigation }) => {
                 >
                     <Text style={styles.buttonText}>View Incomes Report</Text>
                 </TouchableOpacity>
-                <TouchableOpacity
+                <TouchableOpacity  
                 onPress={() => {
                     navigation.navigate("IncomesInsert", {  
-                            yearNumber: yearNumber,
-                            monthNumber:monthNumber
+                            yearNumber: selectedYearNumber_v,
+                            monthNumber:selectedMonthNumber_v
                           });
                 }}
                 style={styles.iconButton}
