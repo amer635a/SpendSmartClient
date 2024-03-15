@@ -87,10 +87,7 @@ const Modal_Last_month_process=Props=>{
           const response = await axios.put(`${HOST}/api/updateInvestAmount`, {
             newInvestAmount: newInvestAmount
           });
-          
-          // Handle success
-          Alert.alert('Success', response.data.message);
-         
+        
           return true;
         } catch (error) {
           // Handle error
@@ -117,8 +114,10 @@ const Modal_Last_month_process=Props=>{
           }
         else
         {
-          res=updateInvestmentAmountDB()
-          if(res==false){
+          res=await updateInvestmentAmountDB()
+          console.log(res)
+          if(res===false){
+            Alert.alert('Error', 'Failed to update investment amount. Please try again.');
             return
           }
 
@@ -181,7 +180,7 @@ const Modal_Last_month_process=Props=>{
              {
                 stageNumber === 3 && (
                   <View>
-                    
+                     <Text>Budget algorithm</Text>
                     <View style={{ height: "56%" }}>
                       <Text>investmentAmount: {investmentAmount}</Text>
                     </View>
