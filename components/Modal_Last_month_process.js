@@ -23,6 +23,7 @@ const Modal_Last_month_process=Props=>{
 
     const [totalExpenses, setTotalExpenses] = useState(0);
     const [totalIncome, setTotalIncome] = useState(0);
+    const [freeMoney,setFreeMoney]=useState(0);
 
     const [investmentAmount, setInvestmentAmount] = useState('');
 
@@ -60,19 +61,15 @@ const Modal_Last_month_process=Props=>{
     console.log("---Modal_Last_month_process ", PrevYear, " ", PrevMonth, " ---");
    
     const backStage =async () => {
-  
       setInvestmentAmount('')
       if(stageNumber >0){
         var stageNumber_temp=stageNumber-1
         setStageNumber(stageNumber_temp)
       }
     }
-  
-    
-
+   
     const nextStage =async () => {
-      // add max stages
-       
+
       if(stageNumber==2)
       {
         if(investmentAmount =='')
@@ -80,16 +77,6 @@ const Modal_Last_month_process=Props=>{
             showAlert()
             return
           }
-        else
-        {
-          // res=await updateInvestmentAmountDB()
-          // console.log(res)
-          // if(res===false){
-          //   Alert.alert('Error', 'Failed to update investment amount. Please try again.');
-          //   return
-          // }
-
-        }
       }
       var stageNumber_temp=stageNumber+1
       setStageNumber(stageNumber_temp)
@@ -100,6 +87,90 @@ const Modal_Last_month_process=Props=>{
 
     const closeStage = () => {
       setModalVisible(!modalVisible)
+    }
+
+    const getUserGoals = async () => {
+      try {
+          const resp = await axios.get(`${HOST}/api/getGoals`);
+          const dbGoals = resp.data.goals;
+          return dbGoals;
+      } catch (error) {
+          console.error("Error while fetching user goals:", error); 
+          throw error;
+      }
+  }
+  
+  ////////////////////////////////////////////////////////
+ 
+      const updateGoalsDB = async (newGoals) => {
+        console.log("updateGoalsDB ->")
+        console.log(newGoals)
+        try {
+            const response = await axios.put(`${HOST}/api/updateGoals`, {
+                newGoals: newGoals
+            });
+            // Handle response or perform any additional actions upon success
+            console.log('Goals updated successfully:', response.data);
+        } catch (error) {
+            // Handle error
+            console.error('Error updating goals:', error);
+            // You can choose to throw the error again to propagate it or handle it as needed
+            throw error;
+        }
+    }
+ 
+  // Function to sum the rates
+  
+    const sumRates= (data)=>{
+      let totalRate = 0;
+      for (let entry of data) {
+          console.log(entry.rate) 
+          totalRate += parseInt(entry.rate);
+      }
+      return totalRate;
+    }
+    // Function to update the remaining amount
+    function updateRemaining(goals, oneRateAmount) {
+      goals.forEach(goal => {
+          const rateAmount = oneRateAmount * parseInt(goal.rate);
+          goal.remaining -= rateAmount;
+      });
+      console.log(goals)
+    }
+
+    const budgetAlgorithm=async (freeMoney)=>{
+      console.log("budgetAlgorithm->")
+      userGoals=await getUserGoals()
+      console.log("done fetch")
+      sumOfRates =  sumRates(userGoals)
+
+      console.log("sumOfRates"+sumOfRates)
+
+      oneRateAmount=parseInt(freeMoney/sumOfRates)
+
+      console.log("oneRateAmount-"+oneRateAmount)
+      updateRemaining(userGoals, oneRateAmount);
+       await updateGoalsDB(userGoals)
+      updateGoalsDB()
+
+    }
+  ////////////////////////////////////////////////////////  
+    const finishStage=async () => {
+      //setModalVisible(!modalVisible)
+      console.log("finishStage")
+      setFreeMoney(parseInt(totalIncome)-parseInt(totalExpenses)-parseInt(investmentAmount))
+      console.log("freeMoney-"+freeMoney)
+      if(freeMoney >0){
+        budgetAlgorithm(freeMoney)
+      }
+
+      // res=await updateInvestmentAmountDB()
+          // console.log(res)
+          // if(res===false){
+          //   Alert.alert('Error', 'Failed to update investment amount. Please try again.');
+          //   return
+          // }
+
     }
 
 
@@ -214,6 +285,18 @@ const Modal_Last_month_process=Props=>{
                   disabled={nextBlocker}
                   >
                   <Text style={styles.textStyle}>Next</Text>
+                </Pressable>
+              }
+              {
+                maxStagesNumber == stageNumber &&
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.button, styles.buttonNext
+                  ]}
+                  onPress={() => finishStage()}
+                  disabled={nextBlocker}
+                  >
+                  <Text style={styles.textStyle}>Finish</Text>
                 </Pressable>
               }
                 

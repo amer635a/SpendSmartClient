@@ -17,7 +17,7 @@ const GoalsInsert = ({ navigation }) => {
   const [amount, setAmount] = useState("");
   const [rate, setRate] = useState("");
   const [description, setDescription] = useState("");
-  const [collected, setCollected] = useState('1500');
+  const [collected, setCollected] = useState('0');
   const [remaining, setRemaining] = useState('0');
   const [achieved, setAchieved] = useState(false);
   const [startDate, setStartDate] = useState('2023-01-01');
