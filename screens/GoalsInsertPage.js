@@ -310,7 +310,7 @@ const GoalsInsert = ({ navigation }) => {
               onChangeText={(text) => setDescription(text)}
             />
             <TouchableOpacity onPress={handleManage} style={styles.buttonStyle}>
-              <Text style={styles.buttonText}>Manage</Text>
+              <Text style={styles.buttonText}>Save</Text>
             </TouchableOpacity>
           </View>
         )}

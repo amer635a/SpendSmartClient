@@ -150,8 +150,8 @@ const Modal_Last_month_process=Props=>{
 
       console.log("oneRateAmount-"+oneRateAmount)
       updateRemaining(userGoals, oneRateAmount);
-       await updateGoalsDB(userGoals)
-      updateGoalsDB()
+      await updateGoalsDB(userGoals)
+       
 
     }
   ////////////////////////////////////////////////////////  

@@ -12,7 +12,7 @@ var isLastMonthProcessActive_1=false
 const OptionPage = ({ navigation }) => {
   const user_id = '64d373c5bf764a582023e5f7';
 
-  const is_client_update_Last_Month_Process=false
+  const is_client_update_Last_Month_Process=true 
  
 
   const DayProcess=23
