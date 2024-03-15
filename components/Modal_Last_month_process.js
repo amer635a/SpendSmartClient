@@ -10,7 +10,8 @@ import { useIsFocused } from '@react-navigation/native';
 const Modal_Last_month_process=Props=>{
 
     const [modalVisible, setModalVisible] = useState(Props.Visible);
-    //onPress={() => setModalVisible(!modalVisible)}>
+ 
+    const [maxStagesNumber, setMaxStagesNumber] = useState(3);
 
     const [nextBlocker, setNextBlocker] = useState(false);
     const [backBlocker, setBackBlocker] = useState(false);
@@ -66,10 +67,40 @@ const Modal_Last_month_process=Props=>{
         setStageNumber(stageNumber_temp)
       }
     }
+  
+    
 
-    const handleUpdate = async () => {
+    const nextStage =async () => {
+      // add max stages
+       
+      if(stageNumber==2)
+      {
+        if(investmentAmount =='')
+          {
+            showAlert()
+            return
+          }
+        else
+        {
+          // res=await updateInvestmentAmountDB()
+          // console.log(res)
+          // if(res===false){
+          //   Alert.alert('Error', 'Failed to update investment amount. Please try again.');
+          //   return
+          // }
+
+        }
+      }
+      var stageNumber_temp=stageNumber+1
+      setStageNumber(stageNumber_temp)
+      console.log("press backStage")
+      console.log(nextBlocker)
       
-    };
+    }
+
+    const closeStage = () => {
+      setModalVisible(!modalVisible)
+    }
 
 
     const updateInvestmentAmountDB = async () => {
@@ -101,38 +132,6 @@ const Modal_Last_month_process=Props=>{
       }
     };
     
-
-    const nextStage =async () => {
-      // add max stages
-       
-      if(stageNumber==2)
-      {
-        if(investmentAmount =='')
-          {
-            showAlert()
-            return
-          }
-        else
-        {
-          res=await updateInvestmentAmountDB()
-          console.log(res)
-          if(res===false){
-            Alert.alert('Error', 'Failed to update investment amount. Please try again.');
-            return
-          }
-
-        }
-      }
-      var stageNumber_temp=stageNumber+1
-      setStageNumber(stageNumber_temp)
-      console.log("press backStage")
-      console.log(nextBlocker)
-      
-    }
-
-    const closeStage = () => {
-      setModalVisible(!modalVisible)
-    }
 
 
     return (
@@ -203,6 +202,9 @@ const Modal_Last_month_process=Props=>{
                     
                 </Pressable>
               } 
+
+              {
+                maxStagesNumber > stageNumber &&
                 <Pressable
                   style={({ pressed }) => [
                     styles.button,
@@ -212,9 +214,8 @@ const Modal_Last_month_process=Props=>{
                   disabled={nextBlocker}
                   >
                   <Text style={styles.textStyle}>Next</Text>
-                  
                 </Pressable>
-
+              }
                 
               </View>
               <Pressable
