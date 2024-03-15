@@ -63,7 +63,7 @@ const GoalsInsert = ({ navigation }) => {
           id: dbGoal._id,
           name: dbGoal.name,
           amount: parseInt(dbGoal.amount),
-          collected: parseInt(dbGoal.collected),
+          collected: parseInt(dbGoal.amount-dbGoal.remaining),
           remaining: parseInt(dbGoal.remaining),
           startDate: new Date(dbGoal.startDate).toISOString().split("T")[0],
           endDate: new Date(dbGoal.endDate).toISOString().split("T")[0],
@@ -85,25 +85,9 @@ const GoalsInsert = ({ navigation }) => {
   }, []);
 
   const handleViewGoalDetails = async (item) => {
-     // Display a confirmation dialog
-    Alert.alert(
-      `View Details for ${item.name}`,
-      `Are you sure you want to view details for the goal "${item.name}"?`,
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'OK',
-          onPress: () => {
-            // Navigate to the details screen
-            navigation.navigate('ViewGoalDetails', { goalData: item });
-          },
-        },
-      ],
-      { cancelable: false }
-    );
+     
+    navigation.navigate('ViewGoalDetails', { goalData: item });
+       
   };
 
   const handleViewGoals = () => {

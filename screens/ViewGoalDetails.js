@@ -5,6 +5,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const ViewGoalDetails = ({ route }) => {
   const { goalData } = route.params;
+  console.log(goalData)
+  goalData.collected=goalData.amount-goalData.remaining
 
   if (!goalData) {
     return (
