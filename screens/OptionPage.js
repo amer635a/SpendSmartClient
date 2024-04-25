@@ -12,14 +12,14 @@ var isLastMonthProcessActive_1=false
 const OptionPage = ({ navigation }) => {
   const user_id = '64d373c5bf764a582023e5f7';
 
-  const is_client_update_Last_Month_Process=true 
+  const is_client_update_Last_Month_Process=false 
  
 
   const DayProcess=23
   const HourProcess=23;
   const MinuteProcess=10;
   // Create a Date object for "24/02/2024 9:42"
-  var processDate = new Date(2024, 1, 25, 9, 42); // Note: Months are zero-based in JavaScript, so February is represented by 1
+  var processDate = new Date(2024, 2, 25, 17, 22); // Note: Months are zero-based in JavaScript, so February is represented by 1
 
 
   //Previuos Month
@@ -147,9 +147,7 @@ const OptionPage = ({ navigation }) => {
     setPrevMonth((pastMonthDate.getMonth()).toString()); 
 
     LastMonthProcess();
-    
-   
-
+  
   }, []); 
  
    

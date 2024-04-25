@@ -164,12 +164,12 @@ const Modal_Last_month_process=Props=>{
         budgetAlgorithm(freeMoney)
       }
 
-      // res=await updateInvestmentAmountDB()
-          // console.log(res)
-          // if(res===false){
-          //   Alert.alert('Error', 'Failed to update investment amount. Please try again.');
-          //   return
-          // }
+      res=await updateInvestmentAmountDB()
+          console.log(res)
+          if(res===false){
+            Alert.alert('Error', 'Failed to update investment amount. Please try again.');
+            return
+          }
 
     }
 
