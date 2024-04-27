@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, SafeAreaView, FlatList,Alert } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, SafeAreaView, FlatList, Alert, Keyboard } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome } from '@expo/vector-icons';
 import FooterList from "../components/footer/FooterList";
@@ -26,10 +26,23 @@ const GoalsInsert = ({ navigation }) => {
   const [isAchievedGoalPressed, setIsAchievedGoalPressed] = useState(false);
   const [isViewGoalPressed, setIsViewGoalPressed] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
- 
+  const [keyboardStatus, setKeyboardStatus] = useState(false); // State variable to track keyboard status
 
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardStatus(true);
+    });
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardStatus(false);
+    });
 
- const handleSearch = (text) => {
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+
+  const handleSearch = (text) => {
     setSearchQuery(text);
 
     const filtered = goals.filter((goal) =>
@@ -85,9 +98,7 @@ const GoalsInsert = ({ navigation }) => {
   }, []);
 
   const handleViewGoalDetails = async (item) => {
-     
     navigation.navigate('ViewGoalDetails', { goalData: item });
-       
   };
 
   const handleViewGoals = () => {
@@ -178,6 +189,7 @@ const GoalsInsert = ({ navigation }) => {
       { cancelable: false }
     );
   };
+  
   const renderGoalItem = ({ item }) => {
     if (isAchievedGoalPressed && !item.achieved) {
       return null; // Skip rendering non-achieved goals in the achieved goals section
@@ -210,8 +222,6 @@ const GoalsInsert = ({ navigation }) => {
       </TouchableOpacity>
     );
   };
- 
-
 
   return (
     <SafeAreaView style={styles.container}>
@@ -316,7 +326,8 @@ const GoalsInsert = ({ navigation }) => {
         )}
       </View>
 
-      <FooterList />
+      {/* Conditionally render the FooterList based on keyboard status */}
+      {!keyboardStatus && <FooterList />}
     </SafeAreaView>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState ,useEffect} from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, SafeAreaView, FlatList ,Modal} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, FlatList ,Modal} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
  import axios from 'axios';
  import { HOST } from '../network';

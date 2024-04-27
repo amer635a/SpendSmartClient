@@ -1,31 +1,46 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, SafeAreaView } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, SafeAreaView, StyleSheet, Keyboard } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import FooterList from "../components/footer/FooterList";
-import { FontAwesome } from '@expo/vector-icons'; // Import FontAwesome
+import { FontAwesome } from '@expo/vector-icons';
 import axios from 'axios';
 import { HOST } from '../network';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const IncomesInsert = ({ route,navigation }) => {
+const IncomesInsert = ({ route, navigation }) => {
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [percentage, setPercentage] = useState("");
   const [tracked, setTracked] = useState("");
   const [yearNumber, setYearNumber] = useState("");
   const [monthNumber, setMonthNumber] = useState("");
-  
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
 
   useEffect(() => {
     const currentDate = new Date();
     setYearNumber(route.params.yearNumber);
-    setMonthNumber(route.params.monthNumber); // Months are 0-based
-    console.log("useEffect -> yearNumber ",route.params.yearNumber," monthNumber",route.params.monthNumber)
- 
-  }, []); // Empty dependency array to ensure it runs only once on component mount
-  const user_id = '64d373c5bf764a582023e5f7';
+    setMonthNumber(route.params.monthNumber);
+
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardVisible(true);
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardVisible(false);
+      }
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
   const handleViewIncomes = async () => {
- 
     const resp = await axios.post(`${HOST}/api/getIncomes`, { user_id, yearNumber, monthNumber });
 
     navigation.navigate("IncomesDetailsPage", {
@@ -40,7 +55,6 @@ const IncomesInsert = ({ route,navigation }) => {
     }
     
     try {
-      console.log("axios insertIncomes send -> yearNumber ",yearNumber," monthNumber",monthNumber)
       const resp = await axios.post(`${HOST}/api/insertIncomes`, {
         user_id,
         name,
@@ -50,7 +64,7 @@ const IncomesInsert = ({ route,navigation }) => {
         yearNumber,
         monthNumber,
       });
-      console.log(resp.data.message)
+      
       await AsyncStorage.setItem("auth-rn", JSON.stringify(resp.data));
       alert("Insert Successfully");
     } 
@@ -58,7 +72,6 @@ const IncomesInsert = ({ route,navigation }) => {
       console.error(error);
       alert("An error occurred. Please try again later.");
     }
-    console.log("Insert Successfully")
   };
 
   return (
@@ -66,9 +79,9 @@ const IncomesInsert = ({ route,navigation }) => {
       <View style={styles.background}>
         <LinearGradient
           colors={['#C9F0DB', '#A0E6C3']}
-          style={styles.gradientBackground}
           start={[0, 0]}
           end={[1, 1]}
+          style={styles.gradientBackground}
         />
         <View style={styles.headerContainer}>
           <Text style={styles.header}>Insert Your Incomes</Text>
@@ -94,7 +107,7 @@ const IncomesInsert = ({ route,navigation }) => {
             onChangeText={text => setTracked(text)}
           />
           <Text style={styles.label}>What percentage of your income do you want to use?:</Text>
-          <View style={[styles.contentPrecntage]}>
+          <View style={styles.contentPercentage}>
             <TextInput
               style={styles.input}
               keyboardType="numeric"
@@ -110,17 +123,17 @@ const IncomesInsert = ({ route,navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-      <FooterList />
+      {!keyboardVisible && <FooterList />}
     </SafeAreaView>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   background: {
     flex: 1,
- 
     paddingTop: 40,
   },
   gradientBackground: {
@@ -141,18 +154,14 @@ const styles = StyleSheet.create({
     color: 'black',
     textAlign: 'center',
   },
-  contentPrecntage: {
+  contentPercentage: {
     width: '100%',
-    maxWidth: 100, // Adjust the maximum width as needed
-    
-
+    maxWidth: 100,
   },
   content: {
     width: '100%',
-    maxWidth: 400, // Adjust the maximum width as needed
+    maxWidth: 400,
     paddingHorizontal: 20,
-
-
   },
   label: {
     fontSize: 16,
@@ -175,9 +184,9 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     backgroundColor: "#E4F2F0",
     height: 50,
-    width: '50%', // Adjust the width as needed
+    width: '50%',
     justifyContent: "center",
-    alignSelf: 'center', // Center the button horizontally
+    alignSelf: 'center',
     borderWidth: 1,
     borderColor: 'black',
     borderRadius: 10,
@@ -188,22 +197,6 @@ const styles = StyleSheet.create({
     color: 'black',
     fontWeight: 'bold',
   },
-  addButton: {
-    position: 'absolute',
-    bottom: 20,
-    left: 20,
-    backgroundColor: 'green',
-    borderRadius: 50,
-    padding: 10,
-  },
-  addIcon: {
-    color: 'white',
-    fontSize: 20,
-  },
 });
 
-
 export default IncomesInsert;
-
-
-

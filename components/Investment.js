@@ -1,23 +1,35 @@
-import React, { useState,useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, Keyboard } from 'react-native';
 
-const InvestmentPage = Props => {
+const InvestmentPage = (Props) => {
   const [investmentAmount, setInvestmentAmount] = useState('');
- 
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      Props.setNextBlocker(true);
+    });
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      Props.setNextBlocker(false);
+    });
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
   const handleInvestmentChange = (text) => {
     // You can add validation if needed
-    if (text==''){
-        Props.setNextBlocker(true)
+    if (text === '') {
+      Props.setNextBlocker(true);
+    } else {
+      Props.setNextBlocker(false);
     }
-    else
-    {
-        Props.setNextBlocker(false)
-    }
- 
+
     setInvestmentAmount(text);
     Props.setInvestmentAmount(text);
   };
- 
+
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>How much money do you want to invest?</Text>
@@ -28,7 +40,6 @@ const InvestmentPage = Props => {
         keyboardType="numeric"
         placeholder="Enter amount"
       />
-       
     </View>
   );
 };

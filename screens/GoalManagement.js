@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Alert,View, Text, TouchableOpacity, StyleSheet, FlatList, TextInput, SafeAreaView } from 'react-native';
+import { Alert, View, Text, TouchableOpacity, StyleSheet, FlatList, TextInput, SafeAreaView, Keyboard } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import FooterList from "../components/footer/FooterList";
 import axios from 'axios';
@@ -9,6 +9,27 @@ const GoalManagementPage = () => {
   const [goals, setGoals] = useState([]);
   const [selectedGoal, setSelectedGoal] = useState(null);
   const [transferAmount, setTransferAmount] = useState('');
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardVisible(true);
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardVisible(false);
+      }
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
 
   useEffect(() => {
     getGoals();
@@ -41,15 +62,15 @@ const GoalManagementPage = () => {
         // You can choose to throw the error again to propagate it or handle it as needed
         throw error;
     }
-}
+  }
 
-  const transferProcess =async (fromGoalId, toGoalId) => {
+  const transferProcess = async (fromGoalId, toGoalId) => {
     // Find fromGoal and toGoal
     const fromGoal = goals.find(goal => goal._id === fromGoalId);
     const toGoal = goals.find(goal => goal._id === toGoalId);
 
-    fromGoal.collected=fromGoal.amount-fromGoal.remaining
-    toGoal.collected=toGoal.amount-toGoal.remaining
+    fromGoal.collected = fromGoal.amount - fromGoal.remaining;
+    toGoal.collected = toGoal.amount - toGoal.remaining;
 
     console.log("transferAmount -->", transferAmount);
      
@@ -61,14 +82,13 @@ const GoalManagementPage = () => {
 
     // Update the goals' collected and remaining amounts after the transfer
     fromGoal.collected = parseFloat(fromGoal.collected) - parseFloat(transferAmount);
-    fromGoal.remaining = parseFloat(fromGoal.remaining )+parseFloat(transferAmount);
+    fromGoal.remaining = parseFloat(fromGoal.remaining) + parseFloat(transferAmount);
 
     toGoal.collected = parseFloat(toGoal.collected) + parseFloat(transferAmount);
     toGoal.remaining = parseFloat(toGoal.remaining) - parseFloat(transferAmount);
     
     await updateGoalsDB(goals)
-}
-
+  }
 
   const transferFunds = (fromGoalId, toGoalId) => {
     // Validate transfer amount
@@ -132,7 +152,7 @@ const GoalManagementPage = () => {
         <Text style={styles.detailsTitle}>{goal.name}</Text>
         <Text style={styles.detailsSubtitle}>Goal Details:</Text>
         <Text style={styles.detailsText}>Amount: ${goal.amount}</Text>
-        <Text style={styles.detailsText}>Collected : ${goal.amount-goal.remaining}</Text>
+        <Text style={styles.detailsText}>Collected : ${goal.amount - goal.remaining}</Text>
         <Text style={styles.detailsText}>Remaining : ${goal.remaining}</Text>
         <Text style={styles.detailsText}>Start Date: {new Date(goal.startDate).toISOString().split("T")[0]}</Text>
         <Text style={styles.detailsText}>End Date: {new Date(goal.endDate).toISOString().split("T")[0]}</Text>
@@ -186,14 +206,13 @@ const GoalManagementPage = () => {
 
         {renderGoalDetails()}
       </View>
-      <FooterList />
+      {!keyboardVisible && <FooterList />}
     </SafeAreaView>
   );
 };
-const styles = StyleSheet.create({
-    container:{flex: 1, justifyContent: "space-between"},
-    mainText:{fontSize:30 , textAlign:"center"},
 
+const styles = StyleSheet.create({
+  container: { flex: 1, justifyContent: "space-between" },
   containerr: {
     flex: 1,
     paddingHorizontal: 20,
