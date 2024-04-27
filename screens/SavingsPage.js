@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, TextInput, SafeAreaView, ScrollView,KeyboardAvoidingView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList, TextInput, SafeAreaView, KeyboardAvoidingView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import FooterList from "../components/footer/FooterList";
 import axios from 'axios';
@@ -118,39 +118,37 @@ const SavingsPage = () => {
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
+        <LinearGradient
+          colors={['#C9F0DB', '#A0E6C3']}
+          style={styles.background}
+          start={[0, 0]}
+          end={[1, 1]}
+        />
         <View style={styles.containerr}>
-          <LinearGradient
-            colors={['#C9F0DB', '#A0E6C3']}
-            style={styles.background}
-            start={[0, 0]}
-            end={[1, 1]}
-          />
-          <ScrollView keyboardShouldPersistTaps="handled">
-            <Text style={styles.header}>Savings Management</Text>
+          <Text style={styles.header}>Savings Management</Text>
 
-            <Text style={styles.savingsAmount}>Savings Amount: ${savingsAmount}</Text>
+          <Text style={styles.savingsAmount}>Savings Amount: ${savingsAmount}</Text>
 
-            <Text style={styles.goalsTitle}>Goals List:</Text>
+          <Text style={styles.goalsTitle}>Goals List:</Text>
 
-            <View style={styles.goalList}>
-              <FlatList
-                data={goals}
-                renderItem={renderGoalItem}
-                keyExtractor={item => item.id}
-              />
-            </View>
+          <View style={styles.goalList}>
+            <FlatList
+              data={goals}
+              renderItem={renderGoalItem}
+              keyExtractor={item => item.id}
+            />
+          </View>
 
-            {errorMessage ? (
-              <Text style={styles.errorMessage}>{errorMessage}</Text>
-            ) : null}
+          {errorMessage ? (
+            <Text style={styles.errorMessage}>{errorMessage}</Text>
+          ) : null}
 
-            <TouchableOpacity
-              style={styles.transferButton}
-              onPress={transferFunds}
-            >
-              <Text style={styles.transferButtonText}>Transfer</Text>
+           
+          <View style={styles.buttonContainerStyle}>
+            <TouchableOpacity onPress={transferFunds} style={styles.buttonStyle}>
+              <Text style={styles.TransferTextButton}>Transfer</Text>
             </TouchableOpacity>
-          </ScrollView>
+          </View>
         </View>
       </KeyboardAvoidingView>
       <FooterList />
@@ -239,6 +237,26 @@ const styles = StyleSheet.create({
   errorMessage: {
     color: 'red',
     marginBottom: 10,
+  },
+  buttonContainerStyle: {
+    alignItems: 'center',
+  },
+  buttonStyle: {
+    marginBottom: 15,
+    backgroundColor: "#E4F2F0",
+    height: 50,
+    width: 300,
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: 'black',
+    borderRadius: 10,
+
+  },
+  TransferTextButton: {
+    fontSize: 20,
+    textAlign: 'center',
+    color: 'black',
+    fontWeight: 'bold',
   },
 });
 
