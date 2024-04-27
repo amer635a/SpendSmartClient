@@ -10,7 +10,7 @@ import Modal_Last_month_process  from '../components/Modal_Last_month_process';
 var isLastMonthProcessActive_1=false
 
 const OptionPage = ({ navigation }) => {
-  const user_id = '64d373c5bf764a582023e5f7';
+  const user_id = '645006320188d6681b4db8f4';
 
   const is_client_update_Last_Month_Process=true 
  
@@ -72,7 +72,7 @@ const OptionPage = ({ navigation }) => {
     console.log("---getExpenses last month process ", yearValue, " ", lastMonthValue, " ---");
 
     const response_get_expenses = await axios.post(`${HOST}/api/getExpenses`, {
-      user_id: '64d373c5bf764a582023e5f7',
+      user_id: '645006320188d6681b4db8f4',
       yearNumber: yearValue,
       monthNumber: (lastMonthValue)+""
     });
@@ -92,7 +92,7 @@ const OptionPage = ({ navigation }) => {
     year=curentYearValue
     console.log("---fetchIncomesData", curentYearValue, " ", currentMonthValue, " ---");
     const response = await axios.post(`${HOST}/api/getIncomes`, {
-      user_id: '64d373c5bf764a582023e5f7',
+      user_id: '645006320188d6681b4db8f4',
       yearNumber: year,
       monthNumber: month
   });

@@ -64,7 +64,7 @@ const IncomesDetails = ({ route, navigation }) => {
     };
     const fetchAvailableDates = async () => {
         try {
-            const userId = '64d373c5bf764a582023e5f7';
+            const userId = '645006320188d6681b4db8f4';
             const response = await axios.get(`${HOST}/api/getAvailableDates`);
             const dates = response.data.availableDates || [];
             setAvailableDates(dates);
@@ -107,7 +107,7 @@ const IncomesDetails = ({ route, navigation }) => {
         try {
             // Fetch incomes data for the selected date
             const response = await axios.post(`${HOST}/api/getIncomes`, {
-                user_id: '64d373c5bf764a582023e5f7',
+                user_id: '645006320188d6681b4db8f4',
                 yearNumber: year,
                 monthNumber: month
             });
@@ -131,7 +131,7 @@ const IncomesDetails = ({ route, navigation }) => {
         console.log("---fetchIncomesData", curentYearValue, " ", currentMonthValue, " ---");
     
         const response_get_incomes = await axios.post(`${HOST}/api/getIcomes`, {
-          user_id: '64d373c5bf764a582023e5f7',
+          user_id: '645006320188d6681b4db8f4',
           yearNumber: currentDate.getFullYear(),
           monthNumber: currentDate.getMonth()+1+""
         });
@@ -158,7 +158,7 @@ const IncomesDetails = ({ route, navigation }) => {
 
     const handleViewIncomesReport = async () => {
         try {
-            const user_id = '64d373c5bf764a582023e5f7';
+            const user_id = '645006320188d6681b4db8f4';
             const resp = await axios.post(`${HOST}/api/getIncomes`,{ user_id, yearNumber, monthNumber });
             const incomesData = resp.data;
             navigation.navigate("IncomesCircularGraph", {

@@ -31,7 +31,7 @@
           if(page==="Expenses"){ 
             
             try {
-              const user_id = '64d373c5bf764a582023e5f7';
+              const user_id = '645006320188d6681b4db8f4';
               const resp = await axios.post(`${HOST}/api/getExpenses`, { user_id, yearNumber, monthNumber });
               console.log("resp   "+resp.data.expenses)
               navigation.navigate("ExpensesDetailsPage", {  
@@ -54,7 +54,7 @@
       
         else if(page==="Incomes")
         { try {
-          const user_id = '64d373c5bf764a582023e5f7';
+          const user_id = '645006320188d6681b4db8f4';
           
           const resp = await axios.post(`${HOST}/api/getIncomes`, { user_id, yearNumber, monthNumber });
         

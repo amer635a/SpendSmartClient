@@ -68,7 +68,7 @@ const ExpensesDetails = ({ route, navigation }) => {
         try {
             // Fetch expenses data for the selected date
             const response = await axios.post(`${HOST}/api/getExpenses`, {
-                user_id: '64d373c5bf764a582023e5f7',
+                user_id: '645006320188d6681b4db8f4',
                 yearNumber: year,
                 monthNumber: month
             });
@@ -92,7 +92,7 @@ const ExpensesDetails = ({ route, navigation }) => {
             console.log("---fetchExpensesData", yearNumber, " ", monthNumber, " ---");
         
             const response_get_expenses = await axios.post(`${HOST}/api/getExpenses`, {
-              user_id: '64d373c5bf764a582023e5f7',
+              user_id: '645006320188d6681b4db8f4',
               yearNumber: currentDate.getFullYear(),
               monthNumber: currentDate.getMonth()+1+""
             });
@@ -107,7 +107,7 @@ const ExpensesDetails = ({ route, navigation }) => {
 
         const fetchAvailableDates = async () => {
             try {
-                const userId = '64d373c5bf764a582023e5f7';
+                const userId = '645006320188d6681b4db8f4';
                 const response = await axios.get(`${HOST}/api/getAvailableDates`);
                 const dates = response.data.availableDates || [];
                 setAvailableDates(dates);
@@ -156,7 +156,7 @@ const ExpensesDetails = ({ route, navigation }) => {
 
     const handleViewExpensesReport = async () => {
         try {
-            const user_id = '64d373c5bf764a582023e5f7';
+            const user_id = '645006320188d6681b4db8f4';
             const resp = await axios.post(`${HOST}/api/getExpenses`, { user_id, yearNumber, monthNumber });
 
             navigation.navigate("ExpensesCircularGraph", {
