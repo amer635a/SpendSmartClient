@@ -91,9 +91,7 @@
               <TouchableOpacity onPress={toggleModal}>
                   <FontAwesome5 name="list" style={styles.iconText} />
               </TouchableOpacity>
-              <TouchableOpacity onPress={handleSearch}>
-                  <FontAwesome5 name="search" style={styles.iconText} />
-              </TouchableOpacity>
+               
 
               {/* Suggested Pages Modal */}
               <Modal isVisible={isModalVisible} animationIn="slideInLeft" animationOut="slideOutLeft" style={styles.modal}>
