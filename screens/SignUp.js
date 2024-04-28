@@ -37,24 +37,34 @@ const SignUp = ({ navigation }) => {
 
     const handleSubmit = async () => {
         if (name === '' || email === '' || password === '') {
+            // Alert if any field is empty
             alert("All fields are required");
             return;
         }
         try {
+            // Post user data to the signup endpoint
             const resp = await axios.post(`${HOST}/api/signup`, { name, email, password });
             console.log(resp.data);
-            if (password.length < 6)
-                alert("Password is required and should be 6 characters long");
-            else
-                setState(resp.data);
+            // Check password length after successful signup
+            if (password.length < 6) {
+                alert("Password should be at least 6 characters long");
+                return;
+            }
+            // Set state with response data
+            setState(resp.data);
+            // Store user authentication data locally
             await AsyncStorage.setItem("auth-rn", JSON.stringify(resp.data));
-            alert("Sign Up Successfully");
+            // Alert successful signup
+            alert("Sign Up Successful");
+            // Navigate to the OptionPage
             navigation.navigate("OptionPage");
         } catch (error) {
+            // Handle errors
             console.error(error);
             alert("An error occurred. Please try again later.");
         }
     };
+    
 
     return (
         <KeyboardAwareScrollView contentContainerStyle={styles.container}>
